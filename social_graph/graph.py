@@ -7,17 +7,22 @@ class Graph:
         self._adj: List[Set[int]] = []  # adjacency list: list[id] -> set of neighbor ids
 
     # ---------- User Management ----------
+
     def add_user(self, username: str) -> None:
-        # Already present
+        # Basic validation
+        if not username or not username.strip():
+            return
+
+        # Already exists
         if username in self._user_to_id:
             return
-        
-        # Add a user if not already present
+    
+        # Add new user
         new_id = len(self._id_to_user)
         self._user_to_id[username] = new_id
         self._id_to_user.append(username)
         self._adj.append(set())
-    
+
     def has_user(self, username: str) -> bool:
         return username in self._user_to_id
     
@@ -51,6 +56,25 @@ class Graph:
         neighbors_ids = self._adj[u_id]
         return sorted(self._id_to_user[v_id] for v_id in neighbors_ids)
     
+    def are_friends(self, u: str, v: str) -> bool:
+        # Check if both users exist
+        if not self.has_user(u) or not self.has_user(v):
+            return False
+        
+        u_id = self._user_to_id[u]
+        v_id = self._user_to_id[v]
+        return v_id in self._adj[u_id]
+    def remove_friendship(self, u: str, v: str) -> None:
+        # Remove an undirected edge if it exists
+        if not self.are_friends(u, v):
+            return
+        
+        u_id = self._user_to_id[u]
+        v_id = self._user_to_id[v]
+
+        self._adj[u_id].remove(v_id)
+        self._adj[v_id].remove(u_id)
+
     # ---------- Adjacency Matrix ----------
     def adjacency_list(self) -> Dict[str, List[str]]:
         # Return List like
