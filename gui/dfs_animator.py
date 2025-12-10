@@ -1,10 +1,7 @@
 from PyQt5.QtCore import QTimer
-
-
 class DFSAnimator:
     """
-    DFS Animation Controller – Lavender Themed
-    Now compatible with DFSPathResult.
+    DFS Animation Controller – now supports final path animation.
     """
 
     def __init__(self, canvas, dfs_result, graph):
@@ -12,23 +9,24 @@ class DFSAnimator:
         self.graph = graph
         self.result = dfs_result
 
-        # Use visited_order instead of dfs_result.order
+        # Convert visited order to IDs
         self.order_ids = [graph.get_user_id(name) for name in dfs_result.visited_order]
 
-        # DFSPathResult does NOT include parent information → disable tree animation
-        self.parent_map = {}
-        self.tree_nodes = []
+        # Convert path to IDs (NEW!)
+        self.path_ids = [graph.get_user_id(name) for name in dfs_result.path]
 
         # Timers
         self.timer = QTimer()
-        self.timer.timeout.connect(self._step)
+        self.timer.timeout.connect(self._step_visit)
 
-        # No tree animation needed anymore
-        self.tree_timer = QTimer()
+        self.path_timer = QTimer()
+        self.path_timer.timeout.connect(self._step_path)
 
         # Counters
         self.index = 0
-        self.tree_index = 0
+        self.path_index = 0
+
+        self.exploration_done = False
 
     # ---------------------------------------------------------
     # Controls
@@ -38,39 +36,44 @@ class DFSAnimator:
         self.canvas.reset_colors()
 
         self.index = 0
-        self.tree_index = 0
+        self.path_index = 0
+        self.exploration_done = False
 
         self.timer.start(380)
 
     def pause(self):
         self.timer.stop()
-        self.tree_timer.stop()
+        self.path_timer.stop()
 
     def step(self):
-        if self.index < len(self.order_ids):
-            self._step()
+        if not self.exploration_done:
+            self._step_visit()
+        else:
+            self._step_path()
 
     def restart(self):
         self.stop_all()
         self.canvas.reset_colors()
         self.index = 0
-        self.tree_index = 0
+        self.path_index = 0
+        self.exploration_done = False
 
     def stop_all(self):
         self.timer.stop()
-        self.tree_timer.stop()
+        self.path_timer.stop()
 
     # ---------------------------------------------------------
     # DFS VISITING ORDER ANIMATION
     # ---------------------------------------------------------
-    def _step(self):
+    def _step_visit(self):
         if self.index >= len(self.order_ids):
             self.timer.stop()
+            self.exploration_done = True
+            self._start_path_animation()
             return
 
         uid = self.order_ids[self.index]
 
-        # Highlight active node
         self.canvas.mark_frontier(uid)
 
         if self.index > 0:
@@ -78,3 +81,22 @@ class DFSAnimator:
             self.canvas.mark_visited(prev)
 
         self.index += 1
+
+    # ---------------------------------------------------------
+    # PATH ANIMATION (NEW!)
+    # ---------------------------------------------------------
+    def _start_path_animation(self):
+        if not self.path_ids:
+            return
+        self.path_index = 0
+        self.path_timer.start(380)
+
+    def _step_path(self):
+        if self.path_index >= len(self.path_ids):
+            self.path_timer.stop()
+            return
+
+        uid = self.path_ids[self.path_index]
+        self.canvas.mark_path(uid)
+
+        self.path_index += 1
