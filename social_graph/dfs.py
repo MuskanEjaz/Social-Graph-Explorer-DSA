@@ -1,68 +1,3 @@
-# # social_graph/dfs.py
-
-# from typing import List
-# from social_graph.graph import Graph
-
-
-# class DFS:
-#     """Object-oriented DFS (kept for report clarity)."""
-
-#     def __init__(self, graph: Graph) -> None:
-#         self.graph = graph
-
-#     def run(self, start_user: str) -> List[str]:
-#         if not self.graph.has_user(start_user):
-#             return []
-
-#         start_id = self.graph._user_to_id[start_user]
-
-#         visited = set()
-#         result: List[str] = []
-
-#         def dfs_recursive(node_id: int):
-#             visited.add(node_id)
-#             result.append(self.graph._id_to_user[node_id])
-
-#             for neighbor in sorted(self.graph._adj[node_id]):
-#                 if neighbor not in visited:
-#                     dfs_recursive(neighbor)
-
-#         dfs_recursive(start_id)
-#         return result
-
-
-# # ---------- SIMPLE FUNCTION FOR WINDOWS ----------
-# def dfs_traversal(graph: Graph, start_user: str) -> List[str]:
-#     """Functional-style DFS (used by GUI)."""
-#     dfs = DFS(graph)
-#     return dfs.run(start_user)
-
-
-
-
-
-
-
-
-
-
-"""
-DFS Traversal Module
---------------------
-
-This file implements a clean, deterministic, GUI-friendly Depth-First Search
-for your Social Graph Explorer project.
-
-Features:
-    • DFS traversal order
-    • parent tree (DFS tree)
-    • node depth levels
-    • timestamps (tin / tout)
-    • structured result (for GUI + animator)
-    • deterministic sorted traversal
-    • execution time measurement
-"""
-
 from typing import Dict, List, Optional, Any
 from time import perf_counter
 from .graph import Graph
@@ -197,3 +132,78 @@ def dfs_traversal(
     )
 
     return result if return_full else order_names
+
+
+# =====================================================================
+# DFS PATH FINDER (Used for DFSWindow)
+# =====================================================================
+
+class DFSPathResult:
+    def __init__(self, path, visited_order, distances):
+        self.path = path
+        self.visited_order = visited_order
+        self.distances = distances
+
+
+def dfs_shortest_path(graph, start_user, target_user, return_full_result=True):
+    """
+    Attempts to find a path from start_user to target_user using DFS.
+    Returns DFSPathResult compatible with BFSWindow/DFSWindow expectations.
+    """
+
+    if not graph.has_user(start_user) or not graph.has_user(target_user):
+        return DFSPathResult([], [], {})
+
+    start = graph.get_user_id(start_user)
+    target = graph.get_user_id(target_user)
+
+    visited = set()
+    visited_order = []
+    parent = {}
+    distances = {start_user: 0}
+
+    found = [False]
+
+    get_neighbors = graph.get_neighbors
+    get_name = graph.get_user_name
+
+    # ---------------------------------------------------------
+    # DFS SEARCH
+    # ---------------------------------------------------------
+    def dfs(u):
+        if found[0]:
+            return
+
+        visited.add(u)
+        visited_order.append(get_name(u))
+
+        if u == target:
+            found[0] = True
+            return
+
+        for v in sorted(get_neighbors(u), key=get_name):
+            if v not in visited:
+                parent[v] = u
+                distances[get_name(v)] = distances[get_name(u)] + 1
+                dfs(v)
+                if found[0]:
+                    return
+
+    parent[start] = None
+    dfs(start)
+
+    # ---------------------------------------------------------
+    # Build Path
+    # ---------------------------------------------------------
+    if not found[0]:
+        return DFSPathResult([], visited_order, distances)
+
+    path = []
+    cur = target
+    while cur is not None:
+        path.append(get_name(cur))
+        cur = parent.get(cur)
+
+    path.reverse()
+
+    return DFSPathResult(path, visited_order, distances)
