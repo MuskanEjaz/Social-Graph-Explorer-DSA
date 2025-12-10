@@ -9,9 +9,6 @@ from PyQt5.QtWidgets import QGraphicsDropShadowEffect
 
 from gui.graph_canvas import GraphCanvas
 from gui.dfs_animator import DFSAnimator
-
-# Correct import
-#from social_graph.dfs import dfs_traversal
 from social_graph.dfs import dfs_shortest_path
 
 

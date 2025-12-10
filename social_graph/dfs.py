@@ -42,17 +42,16 @@ def dfs_traversal(
     start_user: str,
     return_full: bool = True
 ) -> DFSResult | List[str]:
-    """
-    Perform DFS on the graph starting from a given user.
 
-    Parameters:
-        graph (Graph): the social graph
-        start_user (str): the root of the DFS
-        return_full (bool): return DFSResult or only traversal order
+    #Perform DFS on the graph starting from a given user.
 
-    Returns:
-        DFSResult or List[str]
-    """
+    #Parameters:
+        #graph (Graph): the social graph
+        #start_user (str): the root of the DFS
+        #return_full (bool): return DFSResult or only traversal order
+
+    #Returns:
+        #DFSResult or List[str]
 
     start_time = perf_counter()
 
@@ -146,10 +145,8 @@ class DFSPathResult:
 
 
 def dfs_shortest_path(graph, start_user, target_user, return_full_result=True):
-    """
-    Attempts to find a path from start_user to target_user using DFS.
-    Returns DFSPathResult compatible with BFSWindow/DFSWindow expectations.
-    """
+    #Attempts to find a path from start_user to target_user using DFS.
+    #Returns DFSPathResult compatible with BFSWindow/DFSWindow expectations.
 
     if not graph.has_user(start_user) or not graph.has_user(target_user):
         return DFSPathResult([], [], {})

@@ -2,25 +2,7 @@ from typing import Dict, List
 
 
 class DSU:
-    """
-    A fully optimized Union–Find structure supporting:
-
-        find(x)               → returns representative of x
-        union(x, y)           → merges two sets
-        get_components()      → returns groups of connected users
-
-    Internally uses:
-        - path compression
-        - union by rank
-    """
-
     def __init__(self, n: int = 0):
-        """
-        Initialize DSU with `n` elements.
-
-        Parameters:
-            n (int): Number of elements. Users are mapped to indices externally.
-        """
         self.parent = list(range(n))
         self.rank = [0] * n
 
@@ -29,11 +11,6 @@ class DSU:
     # ------------------------------------------------------------------
 
     def _ensure_capacity(self, x: int) -> None:
-        """
-        Expands DSU storage when new indices appear.
-
-        This makes DSU *dynamic* so the graph can add users anytime.
-        """
         current_size = len(self.parent)
         if x >= current_size:
             extend_size = x + 1 - current_size
@@ -41,9 +18,6 @@ class DSU:
             self.rank.extend([0] * extend_size)
 
     def find(self, x: int) -> int:
-        """
-        Find the representative (root) of x with path compression.
-        """
         self._ensure_capacity(x)
 
         if self.parent[x] != x:
@@ -51,9 +25,7 @@ class DSU:
         return self.parent[x]
 
     def union(self, x: int, y: int) -> None:
-        """
-        Merge the sets containing x and y using union-by-rank.
-        """
+
         rootX = self.find(x)
         rootY = self.find(y)
 
@@ -74,14 +46,6 @@ class DSU:
     # ------------------------------------------------------------------
 
     def get_components(self) -> Dict[int, List[int]]:
-        """
-        Returns groups of connected users.
-
-        Returns:
-            Dict[root_id → list_of_node_ids]
-            Example:
-                {0: [0, 2, 5], 3: [3, 7]}
-        """
         components: Dict[int, List[int]] = {}
 
         for node in range(len(self.parent)):
@@ -91,19 +55,6 @@ class DSU:
         return components
 
     def get_named_components(self, id_to_user: Dict[int, str]) -> Dict[str, List[str]]:
-        """
-        Convert numeric components into user-name components for GUI display.
-
-        Parameters:
-            id_to_user (dict): mapping of node_id → username
-
-        Returns:
-            Example:
-                {
-                    "A": ["A", "C", "D"],
-                    "B": ["B", "F"]
-                }
-        """
         numeric_comps = self.get_components()
         named_comps = {}
 

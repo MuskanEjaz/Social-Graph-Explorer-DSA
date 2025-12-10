@@ -1,9 +1,5 @@
 from PyQt5.QtCore import QTimer
 class DFSAnimator:
-    """
-    DFS Animation Controller – now supports final path animation.
-    """
-
     def __init__(self, canvas, dfs_result, graph):
         self.canvas = canvas
         self.graph = graph
@@ -83,7 +79,7 @@ class DFSAnimator:
         self.index += 1
 
     # ---------------------------------------------------------
-    # PATH ANIMATION (NEW!)
+    # PATH ANIMATION
     # ---------------------------------------------------------
     def _start_path_animation(self):
         if not self.path_ids:
