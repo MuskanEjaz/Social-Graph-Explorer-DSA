@@ -1,39 +1,32 @@
-Raihana Walizada - 534532
-Juwairiya Haroon - 505494
-Muskan Ejaz - 522695
-# Social Graph Explorer
-the link for GitHub is: https://github.com/rwlzada123/Social-Graph-Explorer-DSA
-This project is a Python-based Social Graph Explorer built using data structures and algorithms such as Graphs, BFS, DFS, and Disjoint Set Union (DSU). It allows users to add people, create friendships, visualize graph structures, detect communities, perform traversals, and receive friend recommendations. The application includes a colorful graphical interface made with PyQt5, where each feature is displayed in its own window. The backend algorithms are fully tested using pytest to ensure correctness. This project was developed as part of our DSA course to demonstrate practical implementation of graph algorithms and interactive UI design.
+# Social Graph Explorer (DSA Project)
 
-The Structure for the project is as follows
-SocialGraphExplorer/
-│
-├── social_graph/
-│   ├── graph.py
-│   ├── recommendation.py
-│   ├── bfs.py
-│   ├── dfs.py
-│   ├── dsu.py
-│   ├── dfs_iterative.py
-│   └── __init__.py
-│
-├── gui/
-│   ├── MainWindow.py            
-│   ├── bfs_animator.py
-│   ├── recommendation_window.py
-│   ├── dfs_animator.py
-│   ├── graph_view_window.py
-│   ├── graph_canvas.py
-│   ├── add_user_dialog.py
-│   ├── delete_friend_dialog.py
-│   ├── add_friend_dialog.py
-│   ├── community_window.py
-│   ├── bfs_window.py  
-│   └── dfs_window.py
-│
-├── main.py                      ← main launcher file (outside gui)
-├── tests/                       ← for testing
-├── performance_test.py
- 
-├── graph_data.json              ← for saving the data entered
-└── README.md
+## Team Members
+- Raihana Walizada (534532)
+- Juwairiya Haroon (505494)
+- Muskan Ejaz (522695)
+
+## GitHub Repository
+https://github.com/MuskanEjaz/Social-Graph-Explorer-DSA
+
+## Project Overview
+Social Graph Explorer is a Python-based Data Structures and Algorithms (DSA) project that simulates the core backend logic of a social media platform using graph data structures. It demonstrates real-world applications of algorithms such as Breadth-First Search (BFS), Depth-First Search (DFS), and Disjoint Set Union (DSU).
+
+The project allows users to add people, create friendships, analyze social connections, detect communities, perform graph traversals, and generate friend recommendations. It also includes a graphical user interface (GUI) built using PyQt5.
+
+This project was developed as part of a Data Structures and Algorithms course.
+
+---
+
+## Features
+- Graph-based social network modeling
+- BFS and DFS traversal
+- Community detection using DSU
+- Friend recommendation system
+- PyQt5-based GUI
+- Unit and performance testing
+
+---
+
+## Disclaimer
+This project is for educational purposes only.
+
