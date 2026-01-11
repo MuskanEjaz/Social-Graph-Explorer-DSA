@@ -1,12 +1,16 @@
-# Python cache
-__pycache__/
-*.pyc
+# Build files
+build/
+*.o
+*.obj
+*.exe
+*.out
 
-# Virtual environment
-.venv/
-
-# VSCode settings (optional)
+# IDE files
 .vscode/
+.idea/
+*.user
 
-# Pytest cache
-.pytest_cache/
+# OS files
+.DS_Store
+Thumbs.db
+
